@@ -17,7 +17,7 @@ model User {
   id         String   @id @default(uuid()) @db.Uuid
   email      String   @unique
   password   String   // Encrypted password
-  role_id    String   // Foreign key to Role
+  role_id    String   @db.Uuid // Match the type of Role.id // Foreign key to Role 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
@@ -37,6 +37,7 @@ model Role {
 
 model Permission {
   id         String   @id @default(uuid()) @db.Uuid
+  action String
   name       String   @unique
   resource   String   // The resource the permission applies to (e.g., 'raw_material', 'finished_product')
   created_at DateTime @default(now())
@@ -48,8 +49,8 @@ model Permission {
 
 model RolePermission {
   id         String     @id @default(uuid()) @db.Uuid
-  role_id    String     // Foreign key to Role
-  permission_id String  // Foreign key to Permission
+  role_id    String     @db.Uuid // Match the type of Role.id// Foreign key to Role
+  permission_id String  @db.Uuid // Match the type of Role.id// Foreign key to Permission
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
 
@@ -59,8 +60,8 @@ model RolePermission {
 
 model UserPermission {
   id         String     @id @default(uuid()) @db.Uuid
-  user_id    String     // Foreign key to Role
-  permission_id String  // Foreign key to Permission
+  user_id    String     @db.Uuid // Match the type of Role.id// Foreign key to Role
+  permission_id String  @db.Uuid // Match the type of Role.id// Foreign key to Permission
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
 

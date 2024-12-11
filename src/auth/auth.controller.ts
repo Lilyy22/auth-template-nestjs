@@ -4,6 +4,7 @@ import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { LoginUserDto } from './dto/LoginUserDto.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,8 +13,8 @@ export class AuthController {
   // User login
   @Post('login')
   @UseGuards(LocalAuthGuard) // Protect login route with local strategy
-  async login(@Body() loginDto: any) {
-    return this.authService.login(loginDto); // Generate JWT token
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.login(loginUserDto); // Generate JWT token
   }
 
   // Protected route using JWT
