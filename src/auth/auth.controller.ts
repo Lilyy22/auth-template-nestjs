@@ -1,10 +1,10 @@
 // src/auth/auth.controller.ts
 
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Res, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './local-auth.guard';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoginUserDto } from './dto/LoginUserDto.dto';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -13,14 +13,20 @@ export class AuthController {
   // User login
   @Post('login')
   @UseGuards(LocalAuthGuard) // Protect login route with local strategy
-  async login(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.login(loginUserDto); // Generate JWT token
+  async login(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
+    return this.authService.login(loginUserDto, res); // Generate JWT token
   }
 
-  // Protected route using JWT
-  @Post('profile')
-  @UseGuards(JwtAuthGuard) // Protect route with JWT guard
-  getProfile(@Body() body) {
-    return body; // Return user profile data here
+  // User login
+  @Post('refresh')
+  @UseGuards(LocalAuthGuard) // Protect login route with local strategy
+  async refreshToken(@Req() req: Request, @Res() res: Response) {
+    return this.authService.refreshToken(req, res); // Generate JWT token
+  }
+
+  // User logout
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    return this.authService.logout(res);
   }
 }

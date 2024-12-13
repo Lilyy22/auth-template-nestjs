@@ -1,6 +1,6 @@
 // src/user/user.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateUserDto } from './dto/CreateUserDto.dto';
@@ -39,11 +39,18 @@ export class UserService {
   }
 
   async findUserByEmail(email: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: { email: email },
-    });
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: { email: email },
+        include: {
+          role: true, // Include role details (name) in the query
+        },
+      });
 
-    return user;
+      return user;
+    } catch (err) {
+      throw new ForbiddenException(err);
+    }
   }
 
   // Find a user by username

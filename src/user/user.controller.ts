@@ -1,9 +1,9 @@
-// src/user/user.controller.ts
-
 import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/CreateUserDto.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/role.decorator';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 
 @Controller('users')
 export class UserController {
@@ -22,7 +22,8 @@ export class UserController {
   }
 
   @Get('get')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'User')
   async findUser(@Body() emailObj: any) {
     return this.userService.findUserByEmail(emailObj.email);
   }

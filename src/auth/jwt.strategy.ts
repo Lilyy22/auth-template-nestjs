@@ -15,6 +15,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    return this.authService.validateJwtUser(payload);
+    const user = await this.authService.validateJwtUser(payload);
+
+    // Attach the role and other user info to the user object
+    return {
+      userId: payload.id, // Or however you get the user ID
+      username: payload.email, // Or however you get the username
+      role: payload.role, // Attach the role from the JWT payload
+    };
   }
 }
