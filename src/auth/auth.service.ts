@@ -106,7 +106,7 @@ export class AuthService {
       return await this.prismaService.refreshTokens.create({
         data: {
           user_id: userId,
-          refreshToken: hashedToken,
+          refresh_token: hashedToken,
         },
       });
     } catch (err) {
@@ -116,7 +116,7 @@ export class AuthService {
 
   async getRefreshToken(userId) {
     try {
-      return await this.prismaService.refreshTokens.findOne({
+      return await this.prismaService.refreshTokens.findFirst({
         where: {
           user_id: userId,
         },

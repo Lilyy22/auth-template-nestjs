@@ -73,7 +73,7 @@ model UserPermission {
 model refreshTokens {
   id         String     @id @default(uuid()) @db.Uuid
   refresh_token String 
-  user_id String
+  user_id String @db.Uuid
   
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
